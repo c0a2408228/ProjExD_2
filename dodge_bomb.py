@@ -23,9 +23,9 @@ def check_bound(rct: pg.Rect) -> tuple[bool,bool]:
     """
     yoko, tate = True, True #横、縦方向の変数
     #横方向判定
-    if rct.left < 0 or WIDTH < rct.right: #画面内だったら
+    if rct.left < 0 or WIDTH < rct.right: #画面外だったら
         yoko = False
-    if rct.top < 0  or HEIGHT < rct.bottom: #画面内だったら
+    if rct.top < 0  or HEIGHT < rct.bottom: #画面外だったら
         tate = False
     return yoko, tate
 
