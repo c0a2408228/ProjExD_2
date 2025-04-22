@@ -59,12 +59,32 @@ def main():
     tmr = 0
 
     def gameover(screen: pg.Surface) -> None:
+        """
+        ゲームオーバー時に,半透明の黒い画面上に「Game Over」と表
+        示し，泣いているこうかとん画像を貼り付ける関数
+        """
+        height: int = 280
         screen.blit(cc_img,cc_rct)
-        screen.blit(txt, [400, 280])
-        screen.blit(dd_img,[330,280])
-        screen.blit(dd_img,[730,280])
+        screen.blit(txt, [400, height])
+        screen.blit(dd_img,[330,height])
+        screen.blit(dd_img,[730,height])
         pg.display.update()
         time.sleep(5)
+
+    def init_bb_imgs() -> tuple[list[pg.Surface], list[int]]:
+        """
+        サイズの異なる爆弾Surfaceを要素としたリストと加速度リストを返す
+        """
+        bb_imags = []
+        bb_accs = [a for a in range(1, 11)]
+        for r in range(1, 11):
+            bb_img = pg.Surface((20*r, 20*r))
+            pg.draw.circle(bb_img, (255, 0, 0), (10*r, 10*r), 10*r)
+            bb_img.set_colorkey((0,0,0))
+            bb_imags.append(bb_img)
+            print(init_bb_imgs.__doc__)
+        return bb_imags, bb_accs
+    
 
     while True:
         for event in pg.event.get():
@@ -73,6 +93,7 @@ def main():
         screen.blit(bg_img, [0, 0]) 
         if kk_rct.colliderect(bb_rct):
             gameover(screen)
+            print(gameover.__doc__) #docstring
             print("Game Over")
             return
 
@@ -94,9 +115,15 @@ def main():
         kk_rct.move_ip(sum_mv)
         if check_bound(kk_rct) != (True, True):
             kk_rct.move_ip(-sum_mv[0],-sum_mv[1])
-        
+
+        bb_imgs, bb_accs = init_bb_imgs()
+        avx = vx*bb_accs[min(tmr//500, 9)]
+        avy = vy*bb_accs[min(tmr//500, 9)]
+        bb_img = bb_imgs[min(tmr//500, 9)]
+
+
         screen.blit(kk_img, kk_rct)
-        bb_rct.move_ip(vx,vy)
+        bb_rct.move_ip(avx,avy)
         yoko, tate = check_bound(bb_rct)
         if not yoko: #左右どちらかにはみ出ていたら
             vx *= -1
@@ -104,6 +131,7 @@ def main():
             vy *= -1
 
         screen.blit(bb_img, bb_rct)
+    
         pg.display.update()
         tmr += 1
         clock.tick(50)
