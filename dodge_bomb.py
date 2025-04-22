@@ -1,6 +1,7 @@
 import os
 import random
 import sys
+import time
 import pygame as pg
 
 
@@ -41,15 +42,37 @@ def main():
     kk_rct.center = 300, 200
     bb_rct = bb_img.get_rect()
     bb_rct.center = random.randint(0,WIDTH),random.randint(0,HEIGHT)
+
+    cc_img = pg.Surface((1100,650))
+    pg.draw.rect(cc_img,(0,0,0),(0,0,1100,650))
+    cc_rct = cc_img.get_rect()
+    cc_rct.center = 550, 325
+    cc_img.set_alpha(150)
+
+    dd_img = pg.image.load("fig/8.png")
+
+    fonto = pg.font.Font(None, 80)
+    txt = fonto.render("Game Over",True, (255, 255, 255))
+
     vx, vy = +5, +5
     clock = pg.time.Clock()
     tmr = 0
+
+    def gameover(screen: pg.Surface) -> None:
+        screen.blit(cc_img,cc_rct)
+        screen.blit(txt, [400, 280])
+        screen.blit(dd_img,[330,280])
+        screen.blit(dd_img,[730,280])
+        pg.display.update()
+        time.sleep(5)
+
     while True:
         for event in pg.event.get():
             if event.type == pg.QUIT: 
                 return
         screen.blit(bg_img, [0, 0]) 
         if kk_rct.colliderect(bb_rct):
+            gameover(screen)
             print("Game Over")
             return
 
