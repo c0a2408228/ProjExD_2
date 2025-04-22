@@ -43,7 +43,7 @@ def main():
     bb_rct = bb_img.get_rect()
     bb_rct.center = random.randint(0,WIDTH),random.randint(0,HEIGHT)
 
-    cc_img = pg.Surface((HEIGHT,WIDTH))
+    cc_img = pg.Surface((1100,650))
     pg.draw.rect(cc_img,(0,0,0),(0,0,1100,650))
     cc_rct = cc_img.get_rect()
     cc_rct.center = 550, 325
